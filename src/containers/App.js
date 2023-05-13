@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlaneArrival, faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
 
-
 import { setSearchField, requestFlights } from '../actions';
 import PlaneList from './../components/PlaneList';
 import SearchBox from '../components/SearchBox';
@@ -31,7 +30,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-    onRequestFlights: () => dispatch(requestFlights())
+    onRequestFlights: () => dispatch(requestFlights()),
+    onPassTimeDateField: (event) => dispatch(passTimeDateField(event.target.value)),
+    onRequestFlightsByTime: () => dispatch(requestFlightsByTime(event.target.value))
   }
 }
 
