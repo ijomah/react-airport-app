@@ -1,17 +1,20 @@
 import { apiCall } from './api/api'
 import {
   CHANGE_SEARCHFIELD,
-  REQUEST_ROBOTS_PENDING,
-  REQUEST_ROBOTS_SUCCESS,
-  REQUEST_ROBOTS_FAILED
+  REQUEST_FLIGHTS_PENDING,
+  REQUEST_FLIGHTS_SUCCESS,
+  REQUEST_FLIGHTS_FAILED
  } from './constants'
 
 
 export const setSearchField = (text) => ({ type: CHANGE_SEARCHFIELD, payload: text })
 
-export const requestRobots = () => (dispatch) => {
-  dispatch({ type: REQUEST_ROBOTS_PENDING })
-  apiCall('https://jsonplaceholder.typicode.com/users')
-    .then(data => dispatch({ type: REQUEST_ROBOTS_SUCCESS, payload: data }))
-    .catch(error => dispatch({ type: REQUEST_ROBOTS_FAILED, payload: error }))
+export const requestFlights = () => (dispatch) => {
+  dispatch({ type: REQUEST_FLIGHTS_PENDING })
+  apiCall("https://opensky-network.org/api/states/all")
+    .then(data => {
+      console.log(data);
+      return dispatch({ type: REQUEST_FLIGHTS_SUCCESS, payload: data.states })
+    })
+    .catch(error => dispatch({ type: REQUEST_FLIGHTS_FAILED, payload: error }))
 }

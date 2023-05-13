@@ -1,17 +1,17 @@
 import React from 'react';
-import Card from './Card';
+import PlaneCard from './PlaneCard';
 
-const PlaneList = ({ robots }) => {
+const PlaneList = ({ flights }) => {
+  console.log(flights);
+  
   return (
-    <div>
+    <div className='container' style={{width: 1300}}>
       {
-        robots.map((user, i) => {
+        flights.map((onePlane) => {
           return (
-            <Card
-              key={i}
-              id={robots[i].id}
-              name={robots[i].name}
-              email={robots[i].email}
+            <PlaneCard
+              key={onePlane[0]}
+              flight={onePlane}
               />
           );
         })
