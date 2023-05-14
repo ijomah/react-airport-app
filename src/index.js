@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Auth0ProviderWithNavigate } from "./auth0-provider-with-navigate"; 
+import { Auth0ProviderWithNavigate } from "./auth/auth0-provider-with-navigate"; 
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import 'tachyons';

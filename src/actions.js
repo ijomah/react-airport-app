@@ -12,23 +12,12 @@ export const setSearchField = (text) => ({ type: CHANGE_SEARCHFIELD, payload: te
 
 export const passTimeDateField = (timeDate) => ({type: CHANGE_TIMEDATEFIELD, paload: timeDate})
 
-export const requestFlights = () => (dispatch) => {
+export const requestFlights = (url) => (dispatch) => {
   dispatch({ type: REQUEST_FLIGHTS_PENDING })
-  apiCall("https://opensky-network.org/api/states/all")
+  apiCall(url)
     .then(data => {
       console.log(data);
       return dispatch({ type: REQUEST_FLIGHTS_SUCCESS, payload: data.states })
-    })
-    .catch(error => dispatch({ type: REQUEST_FLIGHTS_FAILED, payload: error }))
-}
-
-export const requestFlightsByTime = (timeObj) => (dispatch) => {
-  stringDateTimeConversion(timeObj.time, timeObj.date);
-  dispatch({ type: REQUEST_FLIGHTS_PENDING })
-  apiCall(`https://opensky-network.org/api/flights/all?begin=${151}&end=${1517}`)
-    .then(data => {
-      console.log(data);
-      return dispatch({ type: REQUEST_FLIGHTS_SUCCESS, payload: data })
     })
     .catch(error => dispatch({ type: REQUEST_FLIGHTS_FAILED, payload: error }))
 }

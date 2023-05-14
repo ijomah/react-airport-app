@@ -1,37 +1,37 @@
 import { Outlet } from "react-router-dom";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
+import LoginButton from './../../auth/loginButton';
+import { LogoutButton } from "./../../auth/logoutButton";
 import "./navBar.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const Navigation = (props) => {
-//    const { isAuthenticated, login, logout, userHasScopes } = props.auth;
+const Navigation = () => {
+    const { isAuthenticated } = useAuth0();
     return(
       <Fragment>
         <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="">Home</Link>
           </li>
-          <li>
-            <Link to="/profile">Profile</Link>
-          </li>
-          
-          {/* {isAuthenticated() && (
+         
+          {isAuthenticated && (
             <li>
-              <Link to="/private">Private</Link>
+              <Link to="/profile">Profile</Link>
             </li>
           )}
-          {isAuthenticated() &&
-            userHasScopes(["read:courses"]) && (
-              <li>
-                <Link to="/courses">Courses</Link>
-              </li>
-            )}
-          <li>
-            <button onClick={isAuthenticated() ? logout : login}>
-              {isAuthenticated() ? "Log Out" : "Log In"}
-            </button>
-          </li> */}
+          
+          {!isAuthenticated && (
+        <>
+          <LoginButton />
+        </>
+      )}
+      {isAuthenticated && (
+        <>
+          <LogoutButton />
+        </>
+      )}
         </ul>
       </nav>
         <Outlet />

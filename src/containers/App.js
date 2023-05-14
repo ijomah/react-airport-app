@@ -4,13 +4,19 @@ import { Routes, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlaneArrival, faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
 
+// import { WithAuthenticationRequiredOptions } from '@auth0/auth0-react';
+
 import { setSearchField, requestFlights } from '../actions';
-import PlaneList from './../components/PlaneList';
-import SearchBox from '../components/SearchBox';
-import ErrorBoundary from '../components/ErrorBoundary';
+// import PlaneList from './../components/PlaneList';
+// import SearchBox from '../components/SearchBox';
+// import ErrorBoundary from '../components/ErrorBoundary';
 import Navigation from './../components/nav/navBar';
-import LoginButton from '../components/loginButton';
-import Home from '../components/home/homePage'
+import Home from '../components/home/homePage';
+//import FlightTime from '../components/flightTime';
+import { CallbackPage } from '../auth/callBack'; 
+import NotFoundPage from '../components/errorFolder/NotFoundPage';
+import Profile from '../components/profile';
+
 
 import './App.css';
 
@@ -30,9 +36,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-    onRequestFlights: () => dispatch(requestFlights()),
-    onPassTimeDateField: (event) => dispatch(passTimeDateField(event.target.value)),
-    onRequestFlightsByTime: () => dispatch(requestFlightsByTime(event.target.value))
+    onRequestFlights: () => dispatch(requestFlights('https://opensky-network.org/api/states/all')),
+    onRequestFlightsByTime: (val) => dispatch(requestFlights(`https://opensky-network.org/api/flights/all?begin=${val.Beg}&end=${val.End}`)),
+    // onPassTimeDateField: (event) => dispatch(passTimeDateField(event.target.value)),
+    //onAuth0: () => dispatch(useAuth0())
   }
 }
 
@@ -42,31 +49,23 @@ class App extends Component {
   }
 
   render() {
-    const { flights, searchField, onSearchChange, isPending } = this.props;
+    const { flights, searchField } = this.props;
     const filteredFlights = flights.filter(flight => {
       return flight[2].toLowerCase().includes(searchField.toLowerCase());
     })
+
     return (
       <div className='w-100 tc'>
         <Routes>
           <Route path='/' element={<Navigation />}>
-            <Route index element={<Home />} />
-            {/* <Route path='shop' element={<Shop />} />
-            <Route path='/preferences' element={<Preferences />} /> */}
-            <Route path='/dashboard' element={<LoginButton />} /> 
+            <Route index element={<Home />} />        
+            <Route path='/profile' element={<Profile filteredFlight = {filteredFlights} />} />
+            <Route path='/callback' element={<CallbackPage />} /> 
+            <Route path='*' element={<NotFoundPage />} />
           </Route>
         </Routes>
-        <LoginButton />
-        <h1 className='f1'>World Flights Record </h1>
-        <SearchBox searchChange={onSearchChange}/>
-        <div>
-          { isPending ? <h1>Loading</h1> :
-            <ErrorBoundary>
-              <PlaneList flights={filteredFlights} />
-              {/* <PlaneList flights={flights} /> */}
-            </ErrorBoundary>
-          }
-        </div>
+        <h1 className='f1 pa4'>World Flights Record</h1>
+        <img className='background-image' style={{width:'70em', height:'30em', margin:'.4em'} } src='dashboard-img.jpg' alt='A landed Aircraft' />  
       </div>
     );
   }
