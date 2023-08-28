@@ -4,18 +4,14 @@ import { Routes, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlaneArrival, faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
 
-// import { WithAuthenticationRequiredOptions } from '@auth0/auth0-react';
-
 import { setSearchField, requestFlights } from '../actions';
-// import PlaneList from './../components/PlaneList';
-// import SearchBox from '../components/SearchBox';
-// import ErrorBoundary from '../components/ErrorBoundary';
+
 import Navigation from './../components/nav/navBar';
 import Home from '../components/home/homePage';
-//import FlightTime from '../components/flightTime';
-import { CallbackPage } from '../auth/callBack'; 
+import CallbackPage from '../auth/callBack'; 
 import NotFoundPage from '../components/errorFolder/NotFoundPage';
-import Profile from '../components/profile';
+import Dashboard from '../components/dashboard';
+// import Auth from '../auth/auth';
 
 
 import './App.css';
@@ -36,15 +32,19 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-    onRequestFlights: () => dispatch(requestFlights('https://opensky-network.org/api/states/all')),
-    onRequestFlightsByTime: (val) => dispatch(requestFlights(`https://opensky-network.org/api/flights/all?begin=${val.Beg}&end=${val.End}`)),
-    // onPassTimeDateField: (event) => dispatch(passTimeDateField(event.target.value)),
-    //onAuth0: () => dispatch(useAuth0())
+    onRequestFlights: () => dispatch(requestFlights('https://opensky-network.org/api/states/all'))
+    // onRequestFlightsByTime: (val) => dispatch(requestFlights(`https://opensky-network.org/api/flights/all?begin=${val.Beg}&end=${val.End}`))
   }
 }
 
 class App extends Component {
-  componentDidMount() {
+  // constructor(props) {
+  //   super(props)
+  //  // this.auth = new Auth(this.props.history);
+  //   // console.log("props history check from router ", this.props.history)
+  //   console.log("props check form store ", this.props)
+  // }
+  componentDidMount() { 
     this.props.onRequestFlights();
   }
 
@@ -56,16 +56,24 @@ class App extends Component {
 
     return (
       <div className='w-100 tc'>
-        <Routes>
-          <Route path='/' element={<Navigation />}>
-            <Route index element={<Home />} />        
-            <Route path='/profile' element={<Profile filteredFlight = {filteredFlights} />} />
-            <Route path='/callback' element={<CallbackPage />} /> 
-            <Route path='*' element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-        <h1 className='f1 pa4'>World Flights Record</h1>
-        <img className='background-image' style={{width:'70em', height:'30em', margin:'.4em'} } src='dashboard-img.jpg' alt='A landed Aircraft' />  
+          <Routes>
+            <Route 
+              path='' element={ <Navigation 
+              //auth={this.auth} 
+              />}
+            >
+              <Route path='/home'
+              exact 
+              element={<Home />}
+              // render={props => <Home 
+              //  auth={this.auth} {...props} 
+              // />} 
+              />        
+              <Route path='/dashboard' element={<Dashboard filteredFlight = {filteredFlights} />} />
+              <Route path='/callback' render={props => <CallbackPage auth={this.auth} {...props} />} /> 
+              <Route path='*' element={<NotFoundPage />} />
+            </Route>
+          </Routes>
       </div>
     );
   }

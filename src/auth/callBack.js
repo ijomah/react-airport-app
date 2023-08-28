@@ -1,13 +1,24 @@
-import React from "react";
+import React, { Component } from "react";
 import Navigation from "../components/nav/navBar";
 
-export const CallbackPage = () => {
-  return (
-    <div className="page-layout">
-      <Navigation />
-      <div className="page-layout__content" />
-    </div>
-  );
-};
+
+class CallbackPage extends Component {
+  componentDidMount = () => {
+    // Handle authentication if expected values are in the URL.
+    if (/access_token|id_token|error/.test(this.props.location.hash)) {
+      // this.props.auth.handleAuthentication();
+    } else {
+      throw new Error("Invalid callback URL.");
+    }
+  };
+  render() {
+    return (
+      <div className="page-layout">
+        <h1>Loading...</h1>
+        <Navigation />
+      </div>
+    )
+  }
+}
 
 export default CallbackPage;
